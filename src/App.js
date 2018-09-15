@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import * as Actions from './actions';
 
 import YouTube from 'react-youtube';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 class App extends Component {
   
@@ -25,6 +27,16 @@ class App extends Component {
   videoInput(){
     return (
       <div>
+        <TextField
+          id="name"
+          label="YouTube URL"
+          value={this.props.youtube_url}
+          onChange={this.handleChange.bind(this)}
+          margin="normal"
+        />
+        <Button variant="outlined" color="primary" onclick={this.submitUrl.bind(this)}>
+          Get GIFS!
+        </Button>
         <input type="text" value={this.props.youtube_url} onChange={this.handleChange.bind(this)} />
         <button onclick={this.submitUrl.bind(this)}>Activate Lasers</button>
       </div>
