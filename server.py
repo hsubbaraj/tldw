@@ -6,6 +6,7 @@ import os
 import pytube
 import subprocess
 import json
+import time
 from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
@@ -21,12 +22,17 @@ CORS(app, support_credentials=True)
 def urlToGifs():
     request_json = request.get_json()
     url = request_json[u'url']
-    print(url)
-    title = downloadVideo(url)
-    # content = getText(title)
-    title = "venmo"
-    f = open("venmo.txt", "r")
-    content = f.read()
+    title = getTitle(url) 
+    text = title + ".txt"
+    if text in os.listdir('.'):
+        f = open(text, "r")
+        content = f.read()
+    else:
+        video_path = downloadVideo(url)
+        content = get_transcript(video_path)
+        f = open(text, "w")
+        f.write(content)
+        f.close()
     content.replace("\n", " ")
     content.replace("Speaker ", "")
 
@@ -47,11 +53,40 @@ def urlToGifs():
     # Fill the gifs up with summry keywords
     summry_gifs = getGifsFromKeyword(k2, 5)
     for gif in summry_gifs:
-    	if not gif in gifs and len(gifs) < 6:
-    		gifs.append(gif)
+        if not gif in gifs and len(gifs) < 6:
+            gifs.append(gif)
 
     result = {"gifs": gifs}
     return json.dumps(result)
+
+def getTitle(youtube_link):
+    yt = pytube.YouTube(youtube_link).streams.first()
+    name = yt.default_filename  # get default name using pytube API
+    return name.replace(".mp4", "")
+
+def get_transcript(filename):
+    submit_job = 'curl -X POST "https://api.rev.ai/revspeech/v1beta/jobs" -H "Authorization: Bearer 01Kl4SMaxWvA98J3gzjNvD07TLg5r2b7IRNMbtfLazUS4nT1JOrrMnqQqsEcP1Rhx1ElJmCl73xhuouBH0_86jhp23RKg" -H "Content-Type: multipart/form-data" -F "media=@' + filename + ';type=audio/mp3" -F "options={}"'
+    output = subprocess.check_output(submit_job, shell=True).decode()
+    job_id = output.split("\"")[3]
+    print('waiting on job ' + str(job_id))
+    time.sleep(30)
+
+    while query_job(job_id)[0] == '{':
+        print('still waiting on job...')
+        time.sleep(15)
+    return query_job(job_id);
+
+def query_job(job_id):
+    url = "https://api.rev.ai/revspeech/v1beta/jobs/" + str(job_id) + "/transcript"
+
+    headers = {
+        'Authorization': "Bearer 01Kl4SMaxWvA98J3gzjNvD07TLg5r2b7IRNMbtfLazUS4nT1JOrrMnqQqsEcP1Rhx1ElJmCl73xhuouBH0_86jhp23RKg",
+        'Accept': 'text/plain'
+    }
+
+    response = requests.request("GET", url, headers=headers)
+
+    return response.text
 
 def getGifsFromKeyword(keyword, num):
     keyword = keyword.replace(" ", "+")
