@@ -8,6 +8,10 @@ import * as Actions from './actions';
 import YouTube from 'react-youtube';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 
 class App extends Component {
   
@@ -34,11 +38,10 @@ class App extends Component {
           onChange={this.handleChange.bind(this)}
           margin="normal"
         />
+        <br/>
         <Button variant="outlined" color="primary" onclick={this.submitUrl.bind(this)}>
           Get GIFS!
         </Button>
-        <input type="text" value={this.props.youtube_url} onChange={this.handleChange.bind(this)} />
-        <button onclick={this.submitUrl.bind(this)}>Activate Lasers</button>
       </div>
     );
   }
@@ -75,10 +78,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
+        <AppBar position="static">
+          <Toolbar>
+            
+            <Typography variant="title" color="inherit">
+              TLDR-Videos
+            </Typography>
+            
+          </Toolbar>
+        </AppBar>
         <p className="App-intro">
           {this.videoInput()}
         </p>
