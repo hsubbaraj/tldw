@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -11,12 +10,12 @@ import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 
 class App extends Component {
   
   submitUrl(){
-    if(this.props.youtube_url == ""){
+    console.log('IM DOING SOMETHING')
+    if(this.props.youtube_url === ""){
       alert('Please use a valid youtube link');
     }
     else{
@@ -39,7 +38,7 @@ class App extends Component {
           margin="normal"
         />
         <br/>
-        <Button variant="outlined" color="primary" onclick={this.submitUrl.bind(this)}>
+        <Button variant="outlined" color="primary" onClick={this.submitUrl.bind(this)}>
           Get GIFS!
         </Button>
       </div>
@@ -65,13 +64,21 @@ class App extends Component {
           onReady={this._onReady}
         />
       </div>
-    )
-    const y2 = (<p></p>)
-    if(this.props.youtube_url == ""){
-      return y2;
+    );
+    const y2 = (<p></p>);
+    const y3 = this.props.gif_urls.map((gif) =>
+      <div>
+        <iframe src={gif} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+      </div>
+    );
+    if(this.props.gif_urls.length !== 0){
+      return y3;
+    }
+    else if(this.props.youtube_url !== ""){
+      return y1;
     }
     else{
-      return y1;
+      return y2;
     }
   }
 

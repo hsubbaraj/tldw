@@ -11,7 +11,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
 
-export const website = "http://127.0.0.1:8000/"
+export const website = "http://127.0.0.1:5000/"
 
 export const updateUrl = (youtube_url) => {
   return {
@@ -34,11 +34,13 @@ export const getGifsSuccess = (gif_urls) => {
 // Async load cart
 export const getGifs = (youtube_link) => {
   return (dispatch) => {
-    return axios.post(website + 'forms/api/get_one/', {
-        youtube_url: youtube_link
+    return axios.post(website + 'urlToGifs', {
+        url: youtube_link
       })
       .then(response => {
-        dispatch(getGifsSuccess)
+        var gifs = response.data.gifs;
+        dispatch(getGifsSuccess(gifs))
+        console.log(gifs)
       })
       .catch(error => {
         throw(error);

@@ -10,7 +10,7 @@ export default function gifs(state = initialState, action) {
     case GET_GIFS:
       return {
         	...state, 
-        	gif_urls: action.payload.gif_urls
+        	gif_urls: action.payload.gifs
       };
     case UPDATE_URL:
     	return {
