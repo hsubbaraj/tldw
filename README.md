@@ -13,5 +13,6 @@ Tldw is a webapp to pass the time while watching long, excruciating videos. Just
 
 1. Clone repo
 2. npm install package.json
-3. pip install requirements.txt (pytube, flask, nltk)
+3. pip install (pytube, flask, nltk)
+4. brew install ffmpeg
 
