@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.0.3",
     "axios": "^0.18.0",
+    "package.json": "^2.0.1",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
     "react-redux": "^5.0.7",
