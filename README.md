@@ -1,6 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-
 ## TLDW (Too Long Didn't Watch)
 
 Tldw is a webapp to pass the time while watching long, excruciating videos. Just put in the link to the YouTube video you are watching, then wait as our Revlo and Giphy powered backend does sentiment analysis to give you the GIFs that best reflect the video!
