@@ -3,6 +3,7 @@ import axios from 'axios';
 export const GET_USER_ID = 'GET_USER_ID';
 export const GET_GIFS = 'GET_GIFS';
 export const UPDATE_URL = 'UPDATE_URL';
+export const SUBMIT = 'SUBMIT';
 
 
 
@@ -22,13 +23,20 @@ export const updateUrl = (youtube_url) => {
   };
 };
 
-export const getGifsSuccess = (gif_urls) => {
+export const getGifsSuccess = (gif_urls, title) => {
   return {
     type: GET_GIFS,
     payload: {
       gifs: gif_urls,
+      title: title,
     }
   };
+};
+
+export const submit = () => {
+  return {
+    type: SUBMIT
+  }
 };
 
 // Async load cart
@@ -39,8 +47,9 @@ export const getGifs = (youtube_link) => {
       })
       .then(response => {
         var gifs = response.data.gifs;
-        dispatch(getGifsSuccess(gifs))
-        console.log(gifs)
+        var title = response.data.title;
+        dispatch(getGifsSuccess(gifs, title));
+        console.log(gifs);
       })
       .catch(error => {
         throw(error);

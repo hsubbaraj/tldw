@@ -14,35 +14,66 @@ import Typography from '@material-ui/core/Typography';
 class App extends Component {
   
   submitUrl(){
-    console.log('IM DOING SOMETHING')
+    console.log('IM DOING SOMETHING');
     if(this.props.youtube_url === ""){
       alert('Please use a valid youtube link');
     }
     else{
-      this.props.actions.getGifs(this.props.youtube_url)
+      this.props.actions.submit();
+      this.props.actions.getGifs(this.props.youtube_url);
     }
   }
 
   handleChange(event){
-    this.props.actions.updateUrl(event.target.value)
+    this.props.actions.updateUrl(event.target.value);
+  }
+
+  buttonRender() {
+    if(this.props.submitted){
+      console.log("FUCK");
+      return (<img src="spinner.gif" id="spinner"></img>);
+    }
+    console.log("QUEME");
+    return (
+      <Button variant="outlined" color="primary" onClick={this.submitUrl.bind(this)}>
+        Get GIFS!
+      </Button>
+    );
   }
 
   videoInput(){
+    console.log(this.props.done)
+    if (!this.props.done) {
+      return (
+        <div>
+           <Typography variant="display2" gutterBottom>
+            TOO LONG; DIDN'T WATCH
+          </Typography>
+          <Typography variant="headline" gutterBottom>
+            Enter a YouTube link to get started!
+          </Typography>
+          <TextField
+            id="name"
+            label="YouTube URL"
+            value={this.props.youtube_url}
+            onChange={this.handleChange.bind(this)}
+            margin="normal"
+          />
+          <br/>
+          {this.buttonRender()}
+        </div>
+      );
+    }
     return (
       <div>
-        <TextField
-          id="name"
-          label="YouTube URL"
-          value={this.props.youtube_url}
-          onChange={this.handleChange.bind(this)}
-          margin="normal"
-        />
-        <br/>
-        <Button variant="outlined" color="primary" onClick={this.submitUrl.bind(this)}>
-          Get GIFS!
-        </Button>
+        <Typography variant="display2" gutterBottom>
+          TOO LONG; DIDN'T WATCH
+        </Typography>
+        <Typography variant="headline" gutterBottom>
+          {this.props.title}
+        </Typography>
       </div>
-    );
+    )
   }
 
   displayVideo(){
@@ -57,7 +88,6 @@ class App extends Component {
     var videoid = this.props.youtube_url.substring(id_index+1, this.props.youtube_url.length)
     const y1 = (
       <div>
-        <p>{videoid}</p>
         <YouTube
           videoId={videoid}
           opts={opts}
@@ -66,9 +96,18 @@ class App extends Component {
       </div>
     );
     const y2 = (<p></p>);
-    const y3 = this.props.gif_urls.map((gif) =>
+    const y3 = (
       <div>
-        <iframe src={gif} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        <div>
+          <iframe src={this.props.gif_urls[0]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+          <iframe src={this.props.gif_urls[1]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+          <iframe src={this.props.gif_urls[2]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        </div>
+        <div>
+          <iframe src={this.props.gif_urls[3]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+          <iframe src={this.props.gif_urls[4]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+          <iframe src={this.props.gif_urls[5]} width="480" height="301" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        </div>
       </div>
     );
     if(this.props.gif_urls.length !== 0){
@@ -89,7 +128,7 @@ class App extends Component {
           <Toolbar>
             
             <Typography variant="title" color="inherit">
-              TLDR-Videos
+              TL;DW
             </Typography>
             
           </Toolbar>
@@ -109,7 +148,10 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     gif_urls: state.gifs.gif_urls,
-    youtube_url: state.gifs.youtube_url
+    youtube_url: state.gifs.youtube_url,
+    submitted: state.gifs.submitted,
+    title: state.gifs.title,
+    done: state.gifs.done,
   };
 }
 

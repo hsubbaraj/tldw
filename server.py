@@ -39,12 +39,15 @@ def urlToGifs():
     gifs = []
     # 5 most common nounse from the text
     k1 = getKeyWordsFromText(content, 5)
+    print(k1)
     gifs = getGifsFromKeyword(k1, 2)
 
     # key words from summry
     k2 = getSmmryKeyWords(content, 5)
+    print(k2)
     gifs.extend(getGifsFromKeyword(k2, 2))
 
+    print(title)
     gifs.extend(getGifsFromKeyword(title, 2))
 
     # remove duplicates
@@ -56,7 +59,7 @@ def urlToGifs():
         if not gif in gifs and len(gifs) < 6:
             gifs.append(gif)
 
-    result = {"gifs": gifs}
+    result = {"gifs": gifs, "title": title}
     return json.dumps(result)
 
 def getTitle(youtube_link):
