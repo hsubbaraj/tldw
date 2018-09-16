@@ -40,12 +40,12 @@ def urlToGifs():
     # 5 most common nounse from the text
     k1 = getKeyWordsFromText(content, 5)
     print(k1)
-    gifs = getGifsFromKeyword(k1, 2)
+    gifs = getGifsFromKeyword(k1, 4)
 
     # key words from summry
-    k2 = getSmmryKeyWords(content, 5)
-    print(k2)
-    gifs.extend(getGifsFromKeyword(k2, 2))
+    # k2 = getSmmryKeyWords(content, 5)
+    # print(k2)
+    # gifs.extend(getGifsFromKeyword(k2, 2))
 
     print(title)
     gifs.extend(getGifsFromKeyword(title, 2))
@@ -54,10 +54,10 @@ def urlToGifs():
     gifs = list(set(gifs))
 
     # Fill the gifs up with summry keywords
-    summry_gifs = getGifsFromKeyword(k2, 5)
-    for gif in summry_gifs:
-        if not gif in gifs and len(gifs) < 6:
-            gifs.append(gif)
+    # summry_gifs = getGifsFromKeyword(k2, 5)
+    # for gif in summry_gifs:
+    #     if not gif in gifs and len(gifs) < 6:
+    #         gifs.append(gif)
 
     result = {"gifs": gifs, "title": title}
     return json.dumps(result)
